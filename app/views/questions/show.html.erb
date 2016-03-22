@@ -1,0 +1,31 @@
+<h1><%= @question.title %></h1>
+<%= @question.body %></br>
+ <%= link_to "Edit Question", edit_question_path(@question) %>
+ <%= link_to "Delete Question", @question, method: :delete, data: { confirm: "Are you sure?" } %>
+
+<h1>Answers</h1>
+
+<ul>
+<% @answers.each do |answer| %>
+
+<li> <%= answer.body %></li>
+<% end %>
+</ul>
+<%= form_for [@question, @answer] do |f| %>
+
+
+ <div class="field">
+   <%= f.label :description %><br>
+   <%= f.text_field :body %>
+ </div>
+
+ <div class="field">
+   <%= f.label :user_id %><br>
+   <%= f.text_field :user_id %>
+ </div>
+
+ <div class="actions">
+   <%= f.submit %>
+ </div>
+<% end %>
+<a href="/">Click here go back</a>
