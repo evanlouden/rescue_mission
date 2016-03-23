@@ -1,4 +1,3 @@
-require 'pry'
 class QuestionsController < ApplicationController
 
   def index
@@ -13,15 +12,24 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    current_user
     @question = Question.new
+    if @current_user.nil?
+      flash[:notice] = "Please sign in before posting a question"
+      redirect_to root_url
+    end
   end
 
   def create
+    current_user
+
     @question = Question.new(question_params)
+    @question.user_id = @current_user.id
+
     if @question.save
       redirect_to @question
+      flash[:notice] = "New question created"
     else
-
       render :new
     end
   end
@@ -33,6 +41,7 @@ end
 def update
   @question = Question.find(params[:id])
   if @question.update(question_params)
+    flash[:notice] = "Question updated!"
     redirect_to @question
   else
     render :edit
@@ -42,6 +51,7 @@ end
 def destroy
   @question = Question.find(params[:id])
   @question.destroy
+  flash[:notice] = "Question deleted!"
   redirect_to root_url
 end
 
